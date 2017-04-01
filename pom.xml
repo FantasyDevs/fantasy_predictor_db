@@ -1,0 +1,60 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>fantasy-predictor-db</artifactId>
+    <groupId>pl.fantasypredictordb</groupId>
+    <version>1.0</version>
+    <packaging>pom</packaging>
+    <name>Database project for SQL script versioning</name>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+
+    <profiles>
+        <!-- The configuration of the local development profile -->
+        <profile>
+            <id>DB-LOCAL</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <build.profile.id>LOCAL-DEV</build.profile.id>
+
+                <connection.url>jdbc:postgresql://127.0.0.1:5432/typer</connection.url>
+                <user.name>postgres</user.name>
+                <user.pass>postgres</user.pass>
+                <base.schema>public</base.schema>
+                <org.postgresql-version>9.4.1208</org.postgresql-version>
+            </properties>
+        </profile>
+    </profiles>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-maven-plugin</artifactId>
+                <version>4.0</version>
+                <configuration>
+                    <url>${connection.url}</url>
+                    <user>${user.name}</user>
+                    <password>${user.pass}</password>
+                    <schemas>
+                        <schema>${base.schema}</schema>
+                    </schemas>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.postgresql</groupId>
+                        <artifactId>postgresql</artifactId>
+                        <version>${org.postgresql-version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
